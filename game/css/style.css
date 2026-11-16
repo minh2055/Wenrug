@@ -1,0 +1,247 @@
+/* Emberfall — page, canvas, HUD, screens, buttons. All art is drawn on the canvas. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: #05030f;
+  color: #e8ecff;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#stage {
+  position: relative;
+  width: min(1280px, 100vw);
+  aspect-ratio: 1280 / 800;
+  background: #05030f;
+  box-shadow: 0 0 60px rgba(80, 60, 220, 0.35), 0 0 120px rgba(255, 140, 40, 0.12);
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.hidden { display: none !important; }
+
+/* ---------- HUD ---------- */
+
+#hud {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+  z-index: 5;
+}
+
+.hud-left, .hud-mid, .hud-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-label {
+  font-size: 13px;
+  color: #9aa3c7;
+  letter-spacing: 0.22em;
+}
+
+.hud-value { font-weight: 700; color: #fff; min-width: 2ch; }
+.hud-value.dim { color: #b9c0dd; font-weight: 600; }
+
+.combo {
+  font-weight: 800;
+  color: #ffd166;
+  text-shadow: 0 0 12px rgba(255, 180, 60, 0.9);
+  transition: transform 0.12s ease;
+}
+.combo.hot { color: #ff9f1c; transform: scale(1.18); }
+.combo.max { color: #ff5d8f; text-shadow: 0 0 16px rgba(255, 93, 143, 0.95); }
+
+.power { font-size: 16px; font-weight: 700; letter-spacing: 0.06em; }
+.power .pw-shield { color: #4de3ff; text-shadow: 0 0 10px rgba(77, 227, 255, 0.9); }
+.power .pw-slow { color: #b388ff; text-shadow: 0 0 10px rgba(179, 136, 255, 0.9); }
+.power .pw-magnet { color: #ff7ad9; text-shadow: 0 0 10px rgba(255, 122, 217, 0.9); }
+
+.lives { color: #ff4d6d; font-size: 22px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 77, 109, 0.9); }
+.lives .lost { color: #3a3f5e; text-shadow: none; }
+
+#mute-btn {
+  pointer-events: auto;
+  background: rgba(20, 18, 48, 0.75);
+  border: 1px solid #4a4f7a;
+  color: #cfd6f5;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#mute-btn:hover { border-color: #8f96c9; color: #fff; }
+
+/* ---------- Banner ---------- */
+
+#banner {
+  position: absolute;
+  top: 34%;
+  left: 0; right: 0;
+  text-align: center;
+  z-index: 6;
+  pointer-events: none;
+  animation: banner-pop 1.8s ease forwards;
+}
+#banner .banner-title {
+  font-size: 54px;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  color: #ffe9a8;
+  text-shadow: 0 0 24px rgba(255, 180, 60, 0.95), 0 0 60px rgba(255, 120, 40, 0.6);
+}
+#banner .banner-sub {
+  margin-top: 6px;
+  font-size: 18px;
+  letter-spacing: 0.2em;
+  color: #cdd5f5;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+}
+@keyframes banner-pop {
+  0% { opacity: 0; transform: scale(0.85); }
+  12% { opacity: 1; transform: scale(1.05); }
+  20% { transform: scale(1); }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+/* ---------- Screens ---------- */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  background: radial-gradient(ellipse at center, rgba(10, 8, 32, 0.42) 0%, rgba(5, 3, 15, 0.78) 100%);
+  z-index: 8;
+}
+
+.game-title {
+  font-size: 96px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff7d6 0%, #ffb347 45%, #ff5d8f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 26px rgba(255, 150, 60, 0.55));
+}
+
+.tagline {
+  font-size: 19px;
+  letter-spacing: 0.28em;
+  color: #aab4dd;
+  text-transform: uppercase;
+}
+
+.howto {
+  margin: 8px 0 4px;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #dfe4fb;
+}
+.howto b { color: #ffd166; }
+.c-shield { color: #4de3ff !important; }
+.c-slow { color: #b388ff !important; }
+.c-magnet { color: #ff7ad9 !important; }
+
+.ember-dot {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c4 0%, #ffb347 55%, #ff7b00 100%);
+  box-shadow: 0 0 10px 2px rgba(255, 170, 60, 0.9);
+  vertical-align: -1px;
+}
+
+.screen button {
+  margin-top: 10px;
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: #1a0b00;
+  background: linear-gradient(180deg, #ffe9a8, #ffb347 55%, #ff8c1a);
+  border: none;
+  border-radius: 10px;
+  padding: 14px 42px;
+  cursor: pointer;
+  box-shadow: 0 0 28px rgba(255, 160, 50, 0.55), 0 4px 0 #b25e00;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.screen button:hover { transform: translateY(-2px); box-shadow: 0 0 38px rgba(255, 170, 60, 0.8), 0 6px 0 #b25e00; }
+.screen button:active { transform: translateY(2px); box-shadow: 0 0 18px rgba(255, 160, 50, 0.5), 0 2px 0 #b25e00; }
+
+.start-hint { font-size: 15px; color: #9aa3c7; letter-spacing: 0.12em; }
+.best-line { font-size: 16px; color: #ffd166; letter-spacing: 0.1em; }
+.best-line span { font-weight: 800; }
+
+.screen h2 {
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+}
+.screen .sub { font-size: 18px; color: #aab4dd; letter-spacing: 0.1em; }
+
+.over-title {
+  color: #ff5d7e;
+  text-shadow: 0 0 30px rgba(255, 60, 100, 0.7);
+}
+
+.new-best {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  color: #ffe9a8;
+  text-shadow: 0 0 18px rgba(255, 200, 80, 0.95);
+  animation: best-pulse 1s ease-in-out infinite alternate;
+}
+@keyframes best-pulse { from { opacity: 0.75; } to { opacity: 1; } }
+
+.final-scores {
+  display: flex;
+  gap: 44px;
+  margin: 6px 0;
+}
+.final-scores > div { display: flex; flex-direction: column; gap: 4px; }
+.final-value { font-size: 34px; font-weight: 800; color: #fff; }
+
+/* ---------- Hit flash ---------- */
+
+#flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(255, 40, 60, 0.12) 0%, rgba(255, 30, 50, 0.55) 100%);
+  opacity: 0;
+  z-index: 7;
+}
